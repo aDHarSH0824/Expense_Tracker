@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// No magic strings — categories defined as a constant
 export const CATEGORIES = [
   'Food',
   'Transport',
@@ -12,7 +11,7 @@ export const CATEGORIES = [
   'Other',
 ] as const;
 
-// UUID v4 pattern
+
 const UUID_V4_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 

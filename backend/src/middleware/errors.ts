@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-// Centralized error handler — must have exactly 4 params for Express to recognize it
-// Never leaks stack traces to client in production
+
 export function errorHandler(
   err: unknown,
   _req: Request,

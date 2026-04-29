@@ -1,11 +1,5 @@
 // Money utility — all money conversion logic lives here only.
-// Never inline money conversion anywhere else in the codebase.
 
-/**
- * Convert a user-input string to integer paise.
- * Validates: positive number, at most 2 decimal places, no NaN, no Infinity, no scientific notation.
- * Throws a descriptive error if invalid.
- */
 export function parseToPaise(input: string): number {
   // Reject scientific notation
   if (/[eE]/.test(input)) {

@@ -17,7 +17,6 @@ interface ExpenseRow {
   created_at: string;
 }
 
-// POST /expenses — idempotent create
 router.post('/', (req: Request, res: Response, next: NextFunction): void => {
   try {
     // Validate request body with Zod
@@ -38,7 +37,6 @@ router.post('/', (req: Request, res: Response, next: NextFunction): void => {
     const id = uuidv4();
     const db = getDb();
 
-    // Step 1: Attempt INSERT OR IGNORE — idempotency guarantee via UNIQUE constraint
     const insertStmt = db.prepare(`
       INSERT OR IGNORE INTO expenses
         (id, idempotency_key, amount, category, description, date)
@@ -55,13 +53,11 @@ router.post('/', (req: Request, res: Response, next: NextFunction): void => {
       date
     );
 
-    // Step 2: Fetch the definitive record (whether just inserted or previously existing)
     const selectStmt = db.prepare(
       'SELECT * FROM expenses WHERE idempotency_key = ?'
     );
     const expense = selectStmt.get(idempotency_key) as ExpenseRow;
 
-    // Step 3: Return 201 if newly created, 200 if duplicate key (idempotent replay)
     const statusCode = result.changes === 1 ? 201 : 200;
     res.status(statusCode).json(expense);
   } catch (err) {
@@ -75,7 +71,6 @@ router.get('/', (req: Request, res: Response, next: NextFunction): void => {
     const db = getDb();
     const { category } = req.query;
 
-    // Build WHERE clause dynamically — filtering always in SQL, never JS
     const whereClause =
       typeof category === 'string' && category.trim()
         ? 'WHERE LOWER(category) = LOWER(?)'
@@ -86,7 +81,6 @@ router.get('/', (req: Request, res: Response, next: NextFunction): void => {
         ? [category.trim()]
         : [];
 
-    // Always sort date DESC, created_at DESC for stable secondary sort
     const dataQuery = db.prepare(`
       SELECT * FROM expenses
       ${whereClause}
