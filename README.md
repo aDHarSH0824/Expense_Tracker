@@ -307,9 +307,3 @@ Components never call `fetch()` directly. All HTTP goes through `api/client.ts` 
 - **Pagination** — Data volume does not require it for single-user use.
 - **Category summary endpoint (`GET /expenses/summary`)** — A nice-to-have in the implementation plan but not required by the core spec.
 - **Deployment** — Not yet deployed. Backend targets Render.com (with persistent disk for SQLite); frontend targets Vercel.
-
----
-
-> *Build it like you own it.*
->
-> **Clarity > Cleverness. Correctness > Completeness.**
